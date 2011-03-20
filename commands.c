@@ -24,7 +24,7 @@
 #error BIT_TEST is a macro that should be included as part of RQ.
 #endif
 
-void cmdNop(node_t *ptr)
+static void cmdNop(node_t *ptr)
 {
 	assert(ptr != NULL);
 }
@@ -33,7 +33,7 @@ void cmdNop(node_t *ptr)
 //-----------------------------------------------------------------------------
 // this callback is called if we have an invalid command.  We shouldn't be
 // receiving any invalid commands.
-void cmdInvalid(void *base, void *data, risp_length_t len)
+static void cmdInvalid(void *base, void *data, risp_length_t len)
 {
 	node_t *node;
 	unsigned char *cast;
@@ -57,7 +57,7 @@ void cmdInvalid(void *base, void *data, risp_length_t len)
 // received.  It should clear off any data received and stored in variables 
 // and flags.  In otherwords, after this is executed, the node structure 
 // should be in a predictable state.
-void cmdClear(void *base) 
+static void cmdClear(void *base) 
 {
  	node_t *node = (node_t *) base;
 
@@ -73,7 +73,7 @@ void cmdClear(void *base)
 //-----------------------------------------------------------------------------
 // PING and PONG are handled differently to all other flags.  It will be
 // actioned straight away, and does not require an EXECUTE.
-void cmdPing(void *base)
+static void cmdPing(void *base)
 {
  	node_t *node = (node_t *) base;
 
@@ -87,7 +87,7 @@ void cmdPing(void *base)
 //-----------------------------------------------------------------------------
 // When a PONG is received, it is assumed that we sent a ping.  It can also be
 // used as a keep-alive.
-void cmdPong(void *base)
+static void cmdPong(void *base)
 {
  	node_t *node = (node_t *) base;
 
@@ -194,7 +194,7 @@ static message_t * next_message(node_t *node)
 //-----------------------------------------------------------------------------
 // A request has been received for a queue.  We need take it and pass it to a
 // node that can handle the request.
-void cmdRequest(void *base)
+static void cmdRequest(void *base)
 {
 	node_t *node = (node_t *) base;
 	message_t *msg;
@@ -292,7 +292,7 @@ void cmdRequest(void *base)
 }
 
 
-void cmdReply(void *base)
+static void cmdReply(void *base)
 {
 	node_t *node = (node_t *) base;
 	msg_id_t id;
@@ -385,7 +385,7 @@ void cmdReply(void *base)
 	
 }
 
-void cmdBroadcast(void *base)
+static void cmdBroadcast(void *base)
 {
 	node_t *node = (node_t *) base;
 	queue_t *q = NULL;
@@ -429,7 +429,7 @@ void cmdBroadcast(void *base)
 	}
 }
 
-void cmdNoReply(void *base)
+static void cmdNoReply(void *base)
 {
 	node_t *node = (node_t *) base;
  	
@@ -446,7 +446,7 @@ void cmdNoReply(void *base)
 }
 
 
-void cmdExclusive(void *base)
+static void cmdExclusive(void *base)
 {
 	node_t *node = (node_t *) base;
  	assert(node);
@@ -461,7 +461,7 @@ void cmdExclusive(void *base)
 }
 
 
-void cmdClosing(void *base)
+static void cmdClosing(void *base)
 {
 	node_t *node = (node_t *) base;
  	
@@ -501,7 +501,7 @@ void cmdClosing(void *base)
 // added to the queue list.  If this is the first time this queue is being
 // consumed, then we need to create an action so that it can be consumed on
 // other servers.
-void cmdConsume(void *base)
+static void cmdConsume(void *base)
 {
 	node_t *node = (node_t *) base;
  	queue_t *q=NULL;
@@ -568,7 +568,7 @@ void cmdConsume(void *base)
 	}
 }
 
-void cmdCancelQueue(void *base)
+static void cmdCancelQueue(void *base)
 {
 	node_t *node = (node_t *) base;
  	assert(node != NULL);
@@ -580,7 +580,7 @@ void cmdCancelQueue(void *base)
 	assert(0);
 }
 
-void cmdId(void *base, risp_int_t value)
+static void cmdId(void *base, risp_int_t value)
 {
 	node_t *node= (node_t *) base;
 
@@ -597,7 +597,7 @@ void cmdId(void *base, risp_int_t value)
 		node->handle, value, node->data.flags, node->data.mask);
 }
 
-void cmdQueueID(void *base, risp_int_t value)
+static void cmdQueueID(void *base, risp_int_t value)
 {
 	node_t *node= (node_t *) base;
  	assert(node);
@@ -613,7 +613,7 @@ void cmdQueueID(void *base, risp_int_t value)
 
 
 
-void cmdTimeout(void *base, risp_int_t value)
+static void cmdTimeout(void *base, risp_int_t value)
 {
 	node_t *node= (node_t *) base;
  	assert(node != NULL);
@@ -626,7 +626,8 @@ void cmdTimeout(void *base, risp_int_t value)
 		"node:%d TIMEOUT (%d)", node->handle, value);
 }
 
-void cmdMax(void *base, risp_int_t value)
+
+static void cmdMax(void *base, risp_int_t value)
 {
 	node_t *node= (node_t *) base;
  	assert(node != NULL);
@@ -639,7 +640,7 @@ void cmdMax(void *base, risp_int_t value)
 		"node:%d MAX (%d)", node->handle, value);
 }
 
-void cmdPriority(void *base, risp_int_t value)
+static void cmdPriority(void *base, risp_int_t value)
 {
 	node_t *node= (node_t *) base;
  	assert(node != NULL);
@@ -653,7 +654,7 @@ void cmdPriority(void *base, risp_int_t value)
 }
 
 
-void cmdQueue(void *base, const risp_length_t length, const risp_data_t *data)
+static void cmdQueue(void *base, const risp_length_t length, const risp_data_t *data)
 {
 	node_t *node = (node_t *) base;
  	assert(node != NULL);
@@ -676,7 +677,7 @@ void cmdQueue(void *base, const risp_length_t length, const risp_data_t *data)
 // be transferred to the message object that is created for it.  When
 // everything has completed processing, then the buffer will be returned to the
 // buffpool to be re-used.
-void cmdPayload(void *base, const risp_length_t length, const risp_data_t *data)
+static void cmdPayload(void *base, const risp_length_t length, const risp_data_t *data)
 {
 	node_t *node = (node_t *) base;
  	assert(node != NULL);
@@ -704,7 +705,7 @@ void cmdPayload(void *base, const risp_length_t length, const risp_data_t *data)
 }
 
 
-void cmdDelivered(void *base)
+static void cmdDelivered(void *base)
 {
 	node_t *node = (node_t *) base;
 	msg_id_t msgid;
@@ -792,7 +793,7 @@ void cmdDelivered(void *base)
 	}
 }
 
-void cmdConsuming(void *base)
+static void cmdConsuming(void *base)
 {
 	node_t *node = (node_t *) base;
  	

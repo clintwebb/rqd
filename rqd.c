@@ -8,7 +8,7 @@
 
 #include "commands.h"
 #include "controllers.h"
-#include "daemon.h"
+// #include "daemon.h"
 #include "event-compat.h"
 #include "queue.h"
 #include "server.h"

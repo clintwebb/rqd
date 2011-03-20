@@ -24,7 +24,7 @@ H_send=send.h $(H_node) $(H_message)
 H_signals=signals.h
 
 
-OBJS=rqd.o daemon.o settings.o \
+OBJS=rqd.o settings.o \
      stats.o data.o server.o   \
      node.o queue.o commands.o \
      message.o send.o \
@@ -47,9 +47,6 @@ controllers.o: controllers.c $(H_controllers) $(H_node) $(H_queue) $(H_send) $(H
 data.o: data.c $(H_data)
 	gcc -c -o $@ $(ARGS) data.c
 
-daemon.o: daemon.c daemon.h
-	gcc -c -o $@ $(ARGS) daemon.c
-
 message.o: message.c $(H_message) $(H_queue) $(HH_logging)
 	gcc -c -o $@ $(ARGS) message.c
 
@@ -59,7 +56,7 @@ node.o: node.c $(H_node) $(H_data) $(H_stats) $(H_queue) $(H_server) $(H_send) $
 queue.o: queue.c $(H_queue) $(H_server) $(H_send) $(HH_logging)
 	gcc -c -o $@ $(ARGS) queue.c
 
-rqd.o: rqd.c daemon.h $(H_commands) $(H_server) $(H_settings) $(H_stats) $(H_system_data) $(H_signals) $(H_queue) $(H_controllers) event-compat.h
+rqd.o: rqd.c $(H_commands) $(H_server) $(H_settings) $(H_stats) $(H_system_data) $(H_signals) $(H_queue) $(H_controllers) event-compat.h
 	gcc -c -o $@ $(ARGS) rqd.c
 
 send.o: send.c $(H_send) $(H_queue) $(HH_logging) $(HH_rqproto)

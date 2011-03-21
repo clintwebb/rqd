@@ -32,11 +32,16 @@
 
 
 #define PACKAGE						"rqd"
-#define VERSION						"1.0"
+#define VERSION						"1.01"
 
 
 #if (EXPBUF_VERSION < 0x00010400)
 #error "Requires libexpbuf version v1.04 or higher"
+#endif
+
+
+#if (LIBRQ_SERVICE_VERSION < 0x00010100)
+#error "Requires librq-service version v1.01 or higher"
 #endif
 
 
@@ -70,10 +75,10 @@ static void get_options(settings_t *settings, int argc, char **argv)
 		"v"   /* verbose */
 		
 		"C:"  /* max number of connections */
-		"D:"  /* run as daemon */
+		"D"   /* run as daemon */
 		"U:"  /* user to run as */
 		"P:"  /* pid file */
-		"S:"	/* Server to connect to, can be supplied more than once. */
+		"S:"  /* Server to connect to, can be supplied more than once. */
 		
 		"i:"  /* interfaces to bind to */
 		"p:"  /* port to listen on. */
